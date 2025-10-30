@@ -1,0 +1,470 @@
+/* ===================================================================
+   1. VARIÁVEIS GLOBAIS E RESET
+   Baseado nas especificações do Figma (cores, fontes)
+=================================================================== */
+:root {
+  /* Cores */
+  --bg-main: #FFB966;
+  --bg-light: #FFF8F0;
+  --bg-white: #FFFFFF;
+  --bg-highlight: #FAD17F;
+  --text-dark-brown: #473624;
+  --text-hero: #5F422F;
+  --text-dark: #0D0D0D;
+  --border-dark: #2E3041;
+  --shadow-dark: #191A23;
+
+  /* Fontes */
+  --font-logo: 'Wendy One', sans-serif;
+  --font-heading: 'Alegreya Sans', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-code: 'Source Code Pro', monospace;
+
+  --container-padding-horizontal: 5%;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  line-height: 1.4;
+  /* Isso é importante para o efeito de rotação não criar barras de scroll */
+  overflow-x: hidden; 
+}
+
+/* Container principal para centralizar o conteúdo */
+.container {
+  width: calc(100% - (var(--container-padding-horizontal) * 2));
+  max-width: 1320px; /* Largura do Figma */
+  margin: 0 auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ===================================================================
+   2. HEADER (LOGO)
+=================================================================== */
+header {
+  position: absolute;
+  top: 5px;
+  left: 0; /* Alinha à esquerda da viewport */
+  width: 100%; /* Ocupa 100% da largura da tela */
+  z-index: 10;
+
+  /* O estilo da caixa do Figma */
+  background: var(--bg-light);
+  border: 5px solid #000;
+  border-top: none;
+  border-radius: 0 0 25px 25px;
+
+  /* Adiciona padding que "imita" o .container.
+  */
+  padding: 10px var(--container-padding-horizontal);
+
+  /* Usamos flex para alinhar o logo dentro do header */
+  display: flex;
+  justify-content: flex-start; /* Alinha o logo à esquerda */
+  align-items: center;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  /* Os estilos de borda/fundo/padding foram movidos para o <header> */
+}
+
+header .logo span {
+  font-family: var(--font-logo);
+  font-size: 40px;
+  color: var(--bg-main);
+  line-height: 1;
+}
+
+header .logo img {
+  width: 25px;
+  height: 23px;
+}
+
+/* ===================================================================
+   3. SEÇÃO HERO
+=================================================================== */
+#hero {
+  min-height: 600px;
+  height: 80vh; /* Ocupa 80% da altura da tela */
+  display: flex;
+  align-items: center;
+  padding-top: 100px; /* Espaço para o header */
+}
+
+#hero h1 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 96px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--text-hero);
+  max-width: 700px; /* Largura do Figma */
+}
+
+#hero p {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  line-height: 1.2;
+  color: var(--text-hero);
+  max-width: 650px;
+  margin-top: 20px;
+}
+
+/* ===================================================================
+   4. SEÇÃO SOBRE (COM O FUNDO ROTACIONADO)
+=================================================================== */
+#sobre {
+  position: relative;
+  background: var(--bg-light);
+  padding: 250px 0 150px 0;
+  
+  /* O truque do Figma: rotaciona a seção inteira */
+  transform: rotate(-5deg);
+  /* Sobe a seção para ela "vazar" para cima da seção hero */
+  margin-top: -1px;
+  /* Aumenta o tamanho para cobrir as bordas após a rotação */
+  scale: 1.1; 
+}
+
+/* Container "anti-rotação":
+  Rotaciona o conteúdo de volta para que ele fique reto,
+  enquanto o fundo da seção continua torto.
+*/
+#sobre .container {
+  transform: rotate(5deg);
+  scale: 0.909; /* (1 / 1.1) para anular o scale da seção */
+}
+
+.sobre-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 100px;
+}
+
+.sobre-texto {
+  flex: 1; /* Ocupa o espaço disponível */
+  max-width: 726px; /* Largura do Figma */
+}
+
+.sobre-texto h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 64px;
+  color: var(--text-dark-brown);
+  margin-bottom: 25px;
+}
+
+.sobre-texto p {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  line-height: 1.2;
+}
+
+.sobre-imagem {
+  flex: 1;
+  max-width: 500px; /* Tamanho do Figma */
+  min-width: 300px;
+}
+
+/* Cards de "Comunidade" e "Linguagem" */
+.sobre-cards {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+
+.card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-dark);
+  box-shadow: 0px 5px 0px var(--shadow-dark);
+  border-radius: 45px;
+  padding: 50px;
+  flex: 1; /* Faz os dois cards terem o mesmo tamanho */
+  max-width: 600px;
+}
+
+.card .card-titulo {
+  background: var(--bg-highlight);
+  border-radius: 7px;
+  padding: 5px 12px;
+  display: inline-block; /* Faz o fundo se ajustar ao texto */
+  margin-bottom: 20px;
+}
+
+.card .card-titulo h3 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 30px;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.card p {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+/* ===================================================================
+   5. SEÇÃO FAQ (ACCORDION)
+=================================================================== */
+#faq {
+  padding: 150px 0 100px 0;
+  position: relative; /* Para garantir que apareça sobre a rotação */
+}
+
+#faq h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 64px;
+  color: var(--text-dark-brown);
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.accordion-item {
+  border: 1px solid var(--border-dark);
+  box-shadow: 0px 5px 0px var(--shadow-dark);
+  border-radius: 45px;
+  background: var(--bg-white);
+  /* Esconde o conteúdo que vazar quando o item estiver fechado */
+  overflow: hidden; 
+}
+
+/* Item do accordion quando está ativo (aberto) */
+.accordion-item.active {
+  background: var(--bg-highlight);
+}
+
+.accordion-header {
+  /* Transforma o header em um botão clicável */
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 40px 60px;
+  width: 100%;
+  
+  /* Reseta estilos de botão */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-number {
+  font-family: var(--font-code);
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 1;
+  color: var(--text-dark);
+}
+
+.faq-title {
+  font-family: var(--font-code);
+  font-weight: 600;
+  font-size: 30px;
+  color: var(--text-dark);
+  flex: 1; /* Empurra o ícone de + para o final */
+}
+
+.faq-icon {
+  font-family: var(--font-code);
+  font-size: 50px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.accordion-content {
+  /* Fechado por padrão */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.accordion-content p {
+  font-family: var(--font-code);
+  font-size: 18px;
+  line-height: 1.3;
+  padding: 0 60px 40px 60px;
+  /* Alinha o parágrafo com o título da pergunta */
+  padding-left: calc(60px + 72px + 25px); /* padding + número + gap */
+}
+
+/* Classe 'active' que será adicionada/removida pelo JavaScript 
+*/
+.accordion-item.active .accordion-content {
+  max-height: 300px; /* Altura suficiente para mostrar o conteúdo */
+}
+
+/* ===================================================================
+   6. FOOTER
+=================================================================== */
+footer {
+  background: var(--bg-white);
+  border-radius: 45px 45px 0 0;
+  padding: 55px 0 50px 0;
+  margin-top: 100px;
+  position: relative; /* Garante que fique por cima de tudo */
+}
+
+.contato-label {
+  background: var(--bg-highlight);
+  border-radius: 7px;
+  padding: 5px 12px;
+  display: inline-block;
+  margin-bottom: 25px;
+}
+
+.contato-label h4 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--text-dark);
+}
+
+.contato-info ul li {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--text-dark);
+  margin-top: 50px;
+  padding-top: 50px;
+}
+
+.footer-bottom p {
+  font-family: var(--font-body);
+  font-size: 18px;
+}
+
+/* ===================================================================
+   7. RESPONSIVIDADE (MOBILE)
+=================================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  #hero h1 { font-size: 72px; }
+  #hero p { font-size: 28px; }
+
+  .sobre-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .sobre-texto h2 { font-size: 56px; }
+  .sobre-texto p { font-size: 28px; }
+  
+  .sobre-cards {
+    flex-direction: column;
+  }
+  
+  #faq h2 { font-size: 56px; }
+
+  .accordion-content p {
+    /* No mobile, não precisa do recuo complexo */
+    padding-left: 60px;
+  }
+}
+
+/* Celular */
+@media (max-width: 768px) {
+  header {
+    width: 100%;
+    top: 0;
+    padding: 10px var(--container-padding-horizontal);
+    border-radius: 0 0 20px 20px; 
+  }
+  header .logo {
+    width: auto;
+    border-radius: 0 0 20px 20px;
+    border-left: 5px solid #000;
+    border-right: 5px solid #000;
+    padding: 0;
+    justify-content: flex-start;
+  }
+  header .logo span { font-size: 32px; }
+  header .logo img { width: 20px; height: 18px; }
+
+  #hero {
+    height: auto;
+    min-height: 400px;
+    padding-top: 150px; /* Mais espaço para o header */
+    padding-bottom: 50px;
+    text-align: center;
+  }
+  #hero h1 { font-size: 48px; }
+  #hero p { font-size: 24px; }
+
+  #sobre {
+    padding: 150px 0 100px 0;
+    margin-top: -50px;
+  }
+  .sobre-texto h2 { font-size: 36px; }
+  .sobre-texto p { font-size: 20px; }
+  
+  .card { padding: 30px; }
+  .card .card-titulo h3 { font-size: 24px; }
+  .card p { font-size: 18px; }
+
+  #faq { padding: 100px 0 50px 0; }
+  #faq h2 { 
+    font-size: 36px; 
+    text-align: left; /* Fica melhor no mobile */
+  }
+  
+  .accordion-header {
+    padding: 25px 30px;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  .faq-number { font-size: 36px; }
+  .faq-title { font-size: 18px; }
+  .faq-icon { font-size: 36px; }
+  
+  .accordion-content p {
+    padding: 0 30px 30px 30px; /* Sem recuo */
+    font-size: 16px;
+  }
+  
+  footer {
+    padding: 40px 0 30px 0;
+  }
+  .contato-info { text-align: center; }
+  .contato-label { margin-bottom: 20px; }
+  .footer-bottom { text-align: center; padding-top: 30px; margin-top: 30px;}
+}
