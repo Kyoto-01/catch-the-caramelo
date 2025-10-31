@@ -32,11 +32,6 @@ body {
     font-family: var(--font-code);
 }
 
-/* Classe que o JS vai usar para travar a rolagem */
-body.noscroll {
-    overflow: hidden;
-}
-
 hr {
     border: none;
     height: 1px;
@@ -100,25 +95,23 @@ hr {
 /* ===================================================================
    3. ÁREA DO JOGO (VÍDEO E CARDS)
 =================================================================== */
-#game-board {
-    /* Espaço no topo para o header não cobrir o conteúdo */
-    /* Este padding não é mais necessário se o vídeo não é overlay */
-}
 
 /* Onde o vídeo de introdução vai ficar */
 #video-container {
     /* Baseado no "Rectangle 1" do Figma */
+    /* top: 112px; (do figma) - 87px (header sticky) ~= 25px de margem */
+    margin: 25px auto 0 auto;
     max-width: 1372px;
-    margin: 30px auto 0 auto; /* 112px (top) - 87px (header) ~= 30px */
-    padding: 0 34px; /* Simula o left/right */
+    height: 676px; /* Altura do Figma */
+    padding: 0 34px; /* Simula o left: 34px do Figma */
     box-sizing: border-box;
 }
 
 #intro-video {
     width: 100%;
-    height: 676px; /* Altura do Figma */
+    height: 100%;
     background: #D9D9D9; /* Cor do placeholder do Figma */
-    object-fit: cover;
+    object-fit: cover; /* Cobre a área do container */
 }
 
 .challenges-container {
@@ -129,7 +122,8 @@ hr {
     
     background: var(--bg-white);
     /* O "top: 819px" do Figma indica que ele vem depois do vídeo */
-    margin-top: 30px; /* Espaço entre vídeo e cards */
+    /* 819px (top figma) - 112px (top video figma) - 676px (height video figma) ~= 31px */
+    margin-top: 31px; /* Espaço entre vídeo e cards */
     padding: 50px 103px;
 }
 
@@ -434,6 +428,11 @@ hr {
     margin-top: 0;
     color: var(--text-black);
 }
+.modal-content h2 i { /* Para o ícone de aviso */
+    color: #f0ad4e; /* Cor de aviso */
+    margin-right: 10px;
+}
+
 
 .modal-content p {
     font-family: var(--font-code);
@@ -481,9 +480,15 @@ hr {
    8. RESPONSIVIDADE (MOBILE)
 =================================================================== */
 @media (max-width: 1024px) {
+    #video-container {
+        height: 500px;
+        margin-top: 20px;
+    }
+
     .challenges-container {
         padding: 40px 50px;
         gap: 40px;
+        margin-top: 20px;
     }
     
     .card-header {
@@ -528,92 +533,91 @@ hr {
         font-size: 18px;
     }
 }
+
 @media (max-width: 768px) {
-    #score-text { font-size: 24px; }
-    .score-paw { width: 30px; height: auto; }
-    .header-container { padding: 10px 20px; height: 70px; }
-    .header-logo { height: 45px; }
-    #video-container { padding: 0 10px; margin-top: 15px; }
-    #intro-video { height: 300px; }
-    .challenges-container { padding: 30px 20px; gap: 30px; margin-top: 15px; }
-    .challenge-card { padding: 25px; }
-    .card-header { padding-right: 50px; }
-    .card-toggle { top: 25px; right: 25px; }
+    #score-text {
+        font-size: 24px;
+    }
+    .score-paw {
+        width: 30px;
+        height: auto;
+    }
+    .header-container {
+        padding: 10px 20px;
+        height: 70px;
+    }
+    .header-logo {
+        height: 45px;
+    }
+
+    #video-container {
+        padding: 0 10px;
+        margin-top: 15px;
+        height: 300px;
+    }
+
+    .challenges-container {
+        padding: 30px 20px;
+        gap: 30px;
+        margin-top: 15px;
+    }
+
+    .challenge-card {
+        padding: 25px;
+    }
+
+    .card-header {
+        padding-right: 50px; /* Espaço para o botão de toggle */
+    }
+    .card-toggle {
+        top: 25px;
+        right: 25px;
+    }
+
     .card-number { font-size: 40px; }
     .card-title { font-size: 22px; }
-    .button-dicas, .hint-text, .flag-input { font-size: 16px; }
-    .button-dicas { padding: 12px 20px; height: auto; }
-    .flag-input { padding: 12px 20px; height: auto; }
-    .hint-item { flex-wrap: wrap; height: auto; padding: 10px; gap: 10px; }
-    .hint-text { width: 100%; white-space: normal; }
-} 
-
-/* =========================
-   9. VÍDEO OVERLAY
-========================= */
-#video-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    
+    .button-dicas, .hint-text, .flag-input {
+        font-size: 16px;
+    }
+    .button-dicas {
+        padding: 12px 20px;
+        height: auto;
+    }
+    .flag-input {
+        padding: 12px 20px;
+        height: auto;
+    }
+    
+    .hint-item {
+        flex-wrap: wrap; /* Deixa o texto ir para baixo do botão */
+        height: auto;
+        padding: 10px;
+        gap: 10px;
+    }
+    .hint-text {
+        width: 100%;
+        white-space: normal; /* Permite quebra de linha */
+    }
 }
 
-#intro-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+/* ===================================================================
+   9. VÍDEO OVERLAY (REMOVIDO)
+=================================================================== */
+/* Os estilos do overlay foram removidos. */
 
-/* =========================
+/* ===================================================================
    10. ANIMAÇÕES
-========================= */
+=================================================================== */
 .shake {
     animation: shake 0.5s;
-    border-bottom: 4px solid red !important;
+    border-bottom: 4px solid red !important; /* Feedback de erro */
 }
 
 @keyframes shake {
-    0%   { transform: translateX(0); }
-    25%  { transform: translateX(-10px); }
-    50%  { transform: translateX(10px); }
-    75%  { transform: translateX(-10px); }
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
     100% { transform: translateX(0); }
-}
-
-/* =========================
-   BOTÃO DE MUTE
-========================= */
-.mute-button {
-    background: var(--bg-white);
-    border: 2px solid var(--border-dark);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    color: var(--text-dark);
-    cursor: pointer;
-    margin-left: 20px;
-    transition: all 0.2s ease;
-}
-
-.mute-button:hover {
-    background: #f0f0f0;
-    transform: scale(1.1);
-}
-
-/* Ajustes específicos para mobile */
-@media (max-width: 768px) {
-    .mute-button {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-        margin-left: 10px;
-    }
 }
