@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoOverlay = document.getElementById("video-overlay");
     const introVideo = document.getElementById("intro-video");
     const scoreText = document.getElementById("score-text");
+    const muteToggleBtn = document.getElementById("mute-toggle"); // NOVO
 
     const challengeCards = document.querySelectorAll(".challenge-card");
     
@@ -16,31 +17,88 @@ document.addEventListener("DOMContentLoaded", () => {
     const winModal = document.getElementById("win-modal");
     const winCloseBtn = document.getElementById("win-close");
 
+    // ==================================================================
+    // === ⚡️ BLOCO DE ÁUDIO ⚡️ ===
+    // ==================================================================
+    const audioTheme = new Audio('assets/audio/theme.mp3');
+    const audioCorrect = new Audio('assets/audio/correct.mp3');
+    const audioError = new Audio('assets/audio/error.mp3');
+    const audioClick = new Audio('assets/audio/click.mp3');
+    const audioWin = new Audio('assets/audio/win.mp3');
+    const audioHint = new Audio('assets/audio/hint.mp3');
+
+    audioTheme.loop = true;
+    audioTheme.volume = 0.3;
+    // ==================================================================
+    // === FIM DO BLOCO DE ÁUDIO ===
+    // ==================================================================
+
+
     // --- 2. ESTADO DO JOGO ---
     let currentScore = 0;
     let unlockedLevel = 1;
-    let cardRequestingHint = null; // Guarda qual card pediu a dica
+    let cardRequestingHint = null;
+    let isMuted = false; // NOVO ESTADO DE MUTE
 
     // --- 3. FUNÇÕES PRINCIPAIS ---
 
+    /**
+     * Helper para tocar som (MODIFICADO)
+     * Agora verifica se o jogo está mutado.
+     */
+    function playSound(audioElement) {
+        if (isMuted) return; // Se estiver mutado, não faz nada
+        
+        const sound = audioElement.cloneNode();
+        sound.volume = audioElement.volume;
+        sound.play();
+    }
+    
     /**
      * Destrava a rolagem e esconde o vídeo quando ele termina.
      */
     function startGame() {
         videoOverlay.style.display = "none";
         body.classList.remove("noscroll");
+        
+        // Toca a música tema (MODIFICADO)
+        if (!isMuted) {
+            audioTheme.play().catch(e => console.error("Autoplay de áudio bloqueado."));
+        }
     }
+
+    /**
+     * NOVA FUNÇÃO: Liga ou desliga o som de todo o jogo.
+     */
+    function toggleMute() {
+        isMuted = !isMuted; // Inverte o estado
+        
+        const icon = muteToggleBtn.querySelector('i');
+        
+        if (isMuted) {
+            // Para a música tema
+            audioTheme.pause();
+            // Troca o ícone
+            icon.classList.remove('fa-volume-up');
+            icon.classList.add('fa-volume-mute');
+        } else {
+            // Toca a música tema
+            audioTheme.play().catch(e => console.error("Autoplay de áudio bloqueado."));
+            // Troca o ícone
+            icon.classList.remove('fa-volume-mute');
+            icon.classList.add('fa-volume-up');
+        }
+    }
+
 
     /**
      * Abre ou fecha um card do acordeão.
      */
     function toggleCard(card) {
-        // Não faz nada se o card estiver travado ou já resolvido
         if (card.classList.contains("locked") || card.classList.contains("solved")) {
             return;
         }
 
-        // Fecha todos os outros cards (opcional, mas bom para CTF)
         challengeCards.forEach(otherCard => {
             if (otherCard !== card && otherCard.classList.contains("active")) {
                 otherCard.classList.remove("active");
@@ -49,9 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Abre ou fecha o card clicado
         card.classList.toggle("active");
         const isActive = card.classList.contains("active");
+
+        // Toca som de clique (apenas ao ABRIR)
+        if (isActive) {
+            playSound(audioClick);
+        }
+
         card.querySelector(".card-toggle").textContent = isActive ? "-" : "+";
         card.querySelector(".flag-form").style.display = isActive ? "flex" : "none";
     }
@@ -66,29 +129,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const points = parseInt(card.dataset.points, 10);
         
         if (input.value === correctAnswer) {
-            // --- ACERTOU! ---
+            playSound(audioCorrect);
+            
             card.classList.add("solved");
             card.classList.remove("active");
             
-            // Trava o card em estado de "resolvido"
             const toggleBtn = card.querySelector(".card-toggle");
-            toggleBtn.textContent = "✔"; // Ícone de "check"
+            toggleBtn.textContent = "✔";
             toggleBtn.disabled = true;
             form.style.display = "none";
             
-            // Atualiza a pontuação
             currentScore += points;
             scoreText.textContent = `pontuação: ${currentScore}`;
             
-            // Desbloqueia o próximo nível
             const currentLevel = parseInt(card.dataset.challenge, 10);
             const nextLevel = currentLevel + 1;
             
             if (nextLevel > 7) {
-                // Ganhou o jogo!
+                audioTheme.pause();
+                playSound(audioWin);
                 winModal.style.display = "flex";
             } else {
-                // Desbloqueia o próximo card
                 const nextCard = document.querySelector(`.challenge-card[data-challenge="${nextLevel}"]`);
                 if (nextCard) {
                     nextCard.classList.remove("locked");
@@ -96,8 +157,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         } else {
-            // --- ERROU! ---
-            input.classList.add("shake"); // (Vamos adicionar esse CSS)
+            playSound(audioError);
+            input.classList.add("shake");
             setTimeout(() => input.classList.remove("shake"), 500);
         }
     }
@@ -106,7 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
      * Abre o modal de confirmação de dica.
      */
     function openHintModal(card) {
-        cardRequestingHint = card; // Salva qual card está pedindo
+        playSound(audioHint);
+        cardRequestingHint = card;
         hintModal.style.display = "flex";
     }
 
@@ -130,20 +192,18 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     function confirmHint() {
         if (cardRequestingHint) {
-            // Encontra a primeira dica que ainda está trancada e borrada
+            playSound(audioClick);
+            
             const lockedHint = cardRequestingHint.querySelector(".hint-item.locked");
             if (lockedHint) {
-                // Desbloqueia a dica
                 lockedHint.classList.remove("locked");
                 lockedHint.querySelector(".hint-text").classList.remove("blurred");
                 
-                // Opcional: muda o botão "MOSTRAR"
                 const mostrarBtn = lockedHint.querySelector(".button-mostrar");
                 mostrarBtn.textContent = "VISTO";
                 mostrarBtn.disabled = true;
                 
             } else {
-                // Se não houver mais dicas trancadas
                 alert("O Caramelo não tem mais dicas para esta fase!");
             }
             closeHintModal();
@@ -151,26 +211,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- 4. INICIALIZAÇÃO E EVENTOS ---
-
-    // Evento para destravar o jogo
-    // Use 'ended' para produção, 'click' para testar rápido
     introVideo.addEventListener('ended', startGame); 
-    // introVideo.addEventListener('click', startGame); // Descomente para testar (clica no vídeo para pular)
+    videoOverlay.addEventListener('click', () => {
+        introVideo.pause();
+        startGame();
+    });
 
-    // Adiciona eventos de clique a todos os cards
+    // NOVO LISTENER PARA O BOTÃO DE MUTE
+    muteToggleBtn.addEventListener('click', toggleMute);
+
+    // Listeners dos Cards
     challengeCards.forEach(card => {
-        // Evento no botão de abrir/fechar (+/-)
         card.querySelector(".card-toggle").addEventListener("click", () => {
             toggleCard(card);
         });
 
-        // Evento no envio da flag
         card.querySelector(".flag-form").addEventListener("submit", (e) => {
-            e.preventDefault(); // Impede o recarregamento da página
+            e.preventDefault();
             checkFlag(e.target);
         });
 
-        // Evento no botão "DICAS" (com lâmpada)
         const dicasButton = card.querySelector(".button-dicas");
         if (dicasButton) {
             dicasButton.addEventListener("click", () => {
@@ -179,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Eventos dos modais
+    // Listeners dos Modais
     hintConfirmBtn.addEventListener("click", confirmHint);
     hintCancelBtn.addEventListener("click", closeHintModal);
     winCloseBtn.addEventListener("click", closeWinModal);

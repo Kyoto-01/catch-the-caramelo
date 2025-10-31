@@ -528,114 +528,92 @@ hr {
         font-size: 18px;
     }
 }
-
 @media (max-width: 768px) {
-    #score-text {
-        font-size: 24px;
-    }
-    .score-paw {
-        width: 30px;
-        height: auto;
-    }
-    .header-container {
-        padding: 10px 20px;
-        height: 70px;
-    }
-    .header-logo {
-        height: 45px;
-    }
-
-    #video-container {
-        padding: 0 10px;
-        margin-top: 15px;
-    }
-    #intro-video {
-        height: 300px;
-    }
-
-    .challenges-container {
-        padding: 30px 20px;
-        gap: 30px;
-        margin-top: 15px;
-    }
-
-    .challenge-card {
-        padding: 25px;
-    }
-
-    .card-header {
-        padding-right: 50px; /* Espaço para o botão de toggle */
-    }
-    .card-toggle {
-        top: 25px;
-        right: 25px;
-    }
-
+    #score-text { font-size: 24px; }
+    .score-paw { width: 30px; height: auto; }
+    .header-container { padding: 10px 20px; height: 70px; }
+    .header-logo { height: 45px; }
+    #video-container { padding: 0 10px; margin-top: 15px; }
+    #intro-video { height: 300px; }
+    .challenges-container { padding: 30px 20px; gap: 30px; margin-top: 15px; }
+    .challenge-card { padding: 25px; }
+    .card-header { padding-right: 50px; }
+    .card-toggle { top: 25px; right: 25px; }
     .card-number { font-size: 40px; }
     .card-title { font-size: 22px; }
-    
-    .button-dicas, .hint-text, .flag-input {
-        font-size: 16px;
-    }
-    .button-dicas {
-        padding: 12px 20px;
-        height: auto;
-    }
-    .flag-input {
-        padding: 12px 20px;
-        height: auto;
-    }
-    
-    .hint-item {
-        flex-wrap: wrap; /* Deixa o texto ir para baixo do botão */
-        height: auto;
-        padding: 10px;
-        gap: 10px;
-    }
-    .hint-text {
-        width: 100%;
-        white-space: normal; /* Permite quebra de linha */
-    }
-    /* ===================================================================
-   9. VÍDEO OVERLAY (TRAVA A TELA) - (Faltou no anterior)
-=================================================================== */
+    .button-dicas, .hint-text, .flag-input { font-size: 16px; }
+    .button-dicas { padding: 12px 20px; height: auto; }
+    .flag-input { padding: 12px 20px; height: auto; }
+    .hint-item { flex-wrap: wrap; height: auto; padding: 10px; gap: 10px; }
+    .hint-text { width: 100%; white-space: normal; }
+} 
+
+/* =========================
+   9. VÍDEO OVERLAY
+========================= */
 #video-overlay {
-    position: fixed; /* Cobre a tela inteira */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     background: #000;
-    z-index: 9999; /* Acima de TUDO, menos do modal */
-    
-    /* Centraliza o vídeo */
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    /* Esconde a barra de rolagem do vídeo */
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 #intro-video {
-    /* Ajusta o vídeo para cobrir a área */
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Garante que o vídeo cubra a tela sem distorcer */
+    object-fit: cover;
 }
-/* ===================================================================
+
+/* =========================
    10. ANIMAÇÕES
-=================================================================== */
+========================= */
 .shake {
     animation: shake 0.5s;
-    border-bottom: 4px solid red !important; /* Feedback de erro */
+    border-bottom: 4px solid red !important;
 }
 
 @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
+    0%   { transform: translateX(0); }
+    25%  { transform: translateX(-10px); }
+    50%  { transform: translateX(10px); }
+    75%  { transform: translateX(-10px); }
     100% { transform: translateX(0); }
 }
+
+/* =========================
+   BOTÃO DE MUTE
+========================= */
+.mute-button {
+    background: var(--bg-white);
+    border: 2px solid var(--border-dark);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    color: var(--text-dark);
+    cursor: pointer;
+    margin-left: 20px;
+    transition: all 0.2s ease;
+}
+
+.mute-button:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
+
+/* Ajustes específicos para mobile */
+@media (max-width: 768px) {
+    .mute-button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-left: 10px;
+    }
 }
