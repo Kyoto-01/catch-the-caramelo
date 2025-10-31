@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Caramelo - A Caçada</title>
+
+    <link rel="stylesheet" href="css/game.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600&family=Wellfleet&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="noscroll"> <header class="game-header">
+        <div class="header-container">
+            <img src="assets/images/logo-header.png" alt="Catch the Caramelo" class="header-logo">
+            
+            <div class="score-container">
+                <span id="score-text">pontuação: 0</span>
+                <img src="assets/images/paw-score.png" alt="Pata" class="score-paw">
+            </div>
+        </div>
+    </header>
+
+    <div id="video-overlay">
+        <video id="intro-video" width="100%" height="100%">
+            <source src="assets/videos/intro.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos.
+        </video>
+        </div>
+
+    <main id="game-board">
+        <div class="challenges-container">
+
+            <div class="challenge-card active" data-challenge="1" data-answer="1" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">01</span>
+                    <span class="card-title">Praia Formosa</span>
+                    
+                    <form class="flag-form">
+                        <input type="text" class="flag-input" placeholder="coloque a flag aqui">
+                        <button type="submit" class="flag-submit">OK</button>
+                    </form>
+
+                    <button class="card-toggle" data-action="toggle">-</button>
+                </div>
+
+                <div class="card-content">
+                    <hr>
+                    <p class="card-description">O Tenebroso Miawlware já foi embora, mas fiquei sabendo que ele deixou uma bio comprometedora em uma rede social aê...</p>
+                    
+                    <button class="button-dicas" data-action="open-hint-modal">
+                        <i class="fa-solid fa-lightbulb"></i> DICAS
+                    </button>
+                    
+                    <hr>
+                    
+                    <div class="hints-container">
+                        <div class="hint-item" data-hint="1">
+                            <button class="button-mostrar" data-action="show-hint">MOSTRAR</button>
+                            <span class="hint-text">DICA Nº1 - Você não usa o Instagram?</span>
+                        </div>
+                        <div class="hint-item" data-hint="2">
+                            <button class="button-mostrar" data-action="show-hint">MOSTRAR</button>
+                            <span class="hint-text">DICA Nº2 - @miawlware tá bombando pow</span>
+                        </div>
+                        <div class="hint-item locked" data-hint="3">
+                            <button class="button-mostrar" data-action="show-hint">MOSTRAR</button>
+                            <span class="hint-text blurred">DICA Nº3 - Nosso vilão adora o padrão FLAG{qualquer-coisa-aê}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="2" data-answer="2" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">02</span>
+                    <span class="card-title">Desafio 02</span> <form class="flag-form" style="display: none;"> <input type="text" class="flag-input" placeholder="coloque a flag aqui">
+                        <button type="submit" class="flag-submit">OK</button>
+                    </form>
+
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content">
+                    </div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="3" data-answer="3" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">03</span>
+                    <span class="card-title">Desafio 03</span> <form class="flag-form" style="display: none;"><input type="text" class="flag-input" placeholder="coloque a flag aqui"><button type="submit" class="flag-submit">OK</button></form>
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content"></div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="4" data-answer="4" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">04</span>
+                    <span class="card-title">Desafio 04</span> <form class="flag-form" style="display: none;"><input type="text" class="flag-input" placeholder="coloque a flag aqui"><button type="submit" class="flag-submit">OK</button></form>
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content"></div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="5" data-answer="5" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">05</span>
+                    <span class="card-title">Desafio 05</span> <form class="flag-form" style="display: none;"><input type="text" class="flag-input" placeholder="coloque a flag aqui"><button type="submit" class="flag-submit">OK</button></form>
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content"></div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="6" data-answer="6" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">06</span>
+                    <span class="card-title">Desafio 06</span> <form class="flag-form" style="display: none;"><input type="text" class="flag-input" placeholder="coloque a flag aqui"><button type="submit" class="flag-submit">OK</button></form>
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content"></div>
+            </div>
+
+            <div class="challenge-card locked" data-challenge="7" data-answer="7" data-points="50">
+                <div class="card-header">
+                    <span class="card-number">07</span>
+                    <span class="card-title">Desafio 07</span> <form class="flag-form" style="display: none;"><input type="text" class="flag-input" placeholder="coloque a flag aqui"><button type="submit" class="flag-submit">OK</button></form>
+                    <button class="card-toggle" data-action="toggle">+</button>
+                </div>
+                <div class="card-content"></div>
+            </div>
+
+        </div> </main>
+
+    <div id="hint-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2><i class="fa-solid fa-lightbulb"></i> Usar uma dica?</h2>
+            <p>Tem certeza, agente? O Caramelo não gosta de agentes preguiçosos... mas o Miawlware não vai esperar!</p>
+            <div class="modal-buttons">
+                <button id="hint-confirm" class="button-confirm">Sim, me dê a dica!</button>
+                <button id="hint-cancel" class="button-cancel">Não, eu consigo.</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="win-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>AU-AU-AU! PARABÉNS!</h2>
+            <p>Você foi mais esperto que o Miawlware! Graças a você e ao seu faro para flags, as praias de João Pessoa estão salvas!</p>
+            <div class="modal-buttons">
+                <button id="win-close" class="button-confirm">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js" defer></script>
+</body>
+</html>

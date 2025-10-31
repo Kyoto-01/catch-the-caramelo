@@ -1,0 +1,72 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Wellfleet&display=swap');
+
+:root {
+    --bg-color: #95EBFC;
+    --button-bg: #FFBA66;
+    --button-shadow: #000000;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Wellfleet', cursive;
+    background-color: var(--bg-color);
+    overflow: hidden; 
+}
+
+.start-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box; 
+}
+
+.game-logo {
+   
+    max-width: 877px;
+    width: 90%; 
+    height: auto;
+    margin-bottom: 60px; 
+}
+
+.play-button {
+   
+    width: 270px;
+    height: 86.45px;
+    background: var(--button-bg);
+    border-right: 8px solid var(--button-shadow);
+    border-bottom: 8px solid var(--button-shadow);
+    border-radius: 33px;
+    transform: rotate(-5.42deg);
+
+    
+    font-size: 48px;
+    color: var(--button-shadow);
+    text-decoration: none;
+
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  
+    transition: all 0.1s ease-in-out;
+}
+
+.play-button:hover {
+    transform: rotate(-4.5deg) scale(1.05); 
+}
+
+.play-button:active {
+  
+    transform: rotate(-4.5deg) scale(0.95);
+    border: none;
+    
+    margin-top: 8px; 
+    margin-right: -8px;
+}
