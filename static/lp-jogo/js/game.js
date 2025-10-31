@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Tema: preload e volume reduzido para ser menos intrusivo
     audioTheme.loop = true;
     audioTheme.preload = 'auto';
-    audioTheme.volume = 0.15; // volume reduzido
+    audioTheme.volume = 0.03; // volume reduzido
     // ==================================================================
     // === FIM DO BLOCO DE ÁUDIO ===
     // ==================================================================
