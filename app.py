@@ -38,13 +38,13 @@ def check_flag(
 
 
 @app.post("/flag1")
-def areia_vermelha_flag():
+def formosa_flag():
     flagOriginal = "FLAG{miau-miau-sou-muito-mau}"
     return check_flag(request, flagOriginal)
 
 
 @app.post("/flag2")
-def areia_vermelha_flag():
+def camboinha_flag():
     flagOriginal = "FLAG{miawlware-melhor-que-caramelo}"
     return check_flag(request, flagOriginal)
 
@@ -56,24 +56,24 @@ def areia_vermelha_flag():
 
 
 @app.post("/flag4")
-def areia_vermelha_flag():
+def poco_flag():
     flagOriginal = "FLAG{voce-me-paga-carameloooo}"
     return check_flag(request, flagOriginal)
 
 
 @app.post("/flag5")
-def areia_vermelha_flag():
+def tambau_flag():
     flagOriginal = "FLAG{hehehe-estou-ficando-mais-forte}"
     return check_flag(request, flagOriginal)
 
 @app.post("/flag6")
-def areia_vermelha_flag():
+def cabo_branco_flag():
     flagOriginal = "FLAG{ta-de-sacanagem-caramelo-slk-kkkk}"
     return check_flag(request, flagOriginal)
 
 
 @app.post("/flag7")
-def areia_vermelha_flag():
+def seixas_flag():
     flagOriginal = "FLAG{eh-o-meu-fim-ninguem-derrota-o-caramelo}"
     return check_flag(request, flagOriginal)
 
