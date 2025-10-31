@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const points = parseInt(card.dataset.points, 10);
         
         const challengeNumber = card.dataset.challenge;
-        const endpoint = `http://127.0.0.1:5000/flag${challengeNumber}`;
+        const endpoint = `http://caramelosec.duckdns.org:5000/flag${challengeNumber}`;
 
         const payload = {
             flag: input.value
