@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Miawlware Decoder - Daqui você não passa nem com muita vontade</title>
+</head>
+<body>
+
+  <main id="main" role="main">
+    
+    <form style="font-family:Consolas;">
+        <div>
+          <h1>Aqui é só pra decodificar a flag</h1>
+          <p style="color: red;">
+            <b>Aquela que você não vai encontrar NUNCAAA!!! MUAHUAHUAHUAHUAAAA<b>
+          </p>
+        </div>
+        <div>
+          <label for="encodedflag">Flag codificada aqui pls ^-^ ---></label>
+          <input id="encodedflag" type="text" />
+          <button onclick="decodeflag()">Decodificar</button>
+        </div>
+    </form>
+
+    <script>
+      const decodeflag = () => {
+        alert(atob(document.getElementById("encodedflag").value))
+      }
+    </script>
+  </main>
+
+</body>
+</html>
