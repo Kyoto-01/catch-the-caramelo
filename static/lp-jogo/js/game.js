@@ -27,8 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioWin = new Audio('assets/audio/win.mp3');
     const audioHint = new Audio('assets/audio/hint.mp3');
 
+    // Tema: preload e volume reduzido para ser menos intrusivo
     audioTheme.loop = true;
-    audioTheme.volume = 0.3;
+    audioTheme.preload = 'auto';
+    audioTheme.volume = 0.15; // volume reduzido
     // ==================================================================
     // === FIM DO BLOCO DE ÁUDIO ===
     // ==================================================================
@@ -56,9 +58,29 @@ document.addEventListener("DOMContentLoaded", () => {
         body.classList.remove("noscroll");
         
         if (!isMuted) {
-            audioTheme.play().catch(e => console.error("Autoplay de áudio bloqueado."));
+            // Tenta tocar o tema; se o navegador bloquear por autoplay, cairá no catch
+            audioTheme.play().catch(e => console.warn("Autoplay de áudio bloqueado (será ativado no primeiro gesto do usuário)."));
         }
     }
+
+    // Se o navegador bloquear autoplay, tentamos novamente no primeiro gesto do usuário
+    function onFirstUserGesture() {
+        if (!isMuted) {
+            audioTheme.play().then(() => {
+                // sucesso: removemos os listeners
+                document.removeEventListener('click', onFirstUserGesture);
+                document.removeEventListener('keydown', onFirstUserGesture);
+                document.removeEventListener('touchstart', onFirstUserGesture);
+            }).catch(() => {
+                // continua esperando pelo próximo gesto
+            });
+        }
+    }
+
+    // Registra os listeners para garantir que a trilha tema comece ao primeiro gesto do usuário
+    document.addEventListener('click', onFirstUserGesture);
+    document.addEventListener('keydown', onFirstUserGesture);
+    document.addEventListener('touchstart', onFirstUserGesture);
 
     function toggleMute() {
         // Se o botão não existir (por algum motivo), não faz nada
@@ -193,13 +215,22 @@ document.addEventListener("DOMContentLoaded", () => {
             playSound(audioClick);
             const lockedHint = cardRequestingHint.querySelector(".hint-item.locked");
             if (lockedHint) {
+                // Descobre qual dica está sendo liberada (1, 2 ou 3)
+                const hintNumber = parseInt(lockedHint.dataset.hint, 10);
+
                 lockedHint.classList.remove("locked");
                 lockedHint.querySelector(".hint-text").classList.remove("blurred");
-                
+
                 const mostrarBtn = lockedHint.querySelector(".button-mostrar");
                 mostrarBtn.textContent = "VISTO";
                 mostrarBtn.disabled = true;
-                
+
+                // Se for a terceira dica, desconta 10 pontos da pontuação atual
+                if (hintNumber === 3) {
+                    currentScore -= 10;
+                    scoreText.textContent = `pontuação: ${currentScore}`;
+                }
+
             } else {
                 alert("O Caramelo não tem mais dicas para esta fase!");
             }
