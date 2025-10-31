@@ -3,17 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 1. SELETORES DE ELEMENTOS ---
     const body = document.body;
-    const videoOverlay = document.getElementById("video-overlay");
-    const introVideo = document.getElementById("intro-video");
-    const scoreText = document.getElementById("score-text");
+    // Estes podem ser 'null' se o HTML não tiver, e tudo bem
+    const videoOverlay = document.getElementById("video-overlay"); 
+    const introVideo = document.getElementById("intro-video");     
     const muteToggleBtn = document.getElementById("mute-toggle");
 
+    // Estes são essenciais
+    const scoreText = document.getElementById("score-text");
     const challengeCards = document.querySelectorAll(".challenge-card");
-    
     const hintModal = document.getElementById("hint-modal");
     const hintConfirmBtn = document.getElementById("hint-confirm");
     const hintCancelBtn = document.getElementById("hint-cancel");
-
     const winModal = document.getElementById("win-modal");
     const winCloseBtn = document.getElementById("win-close");
 
@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // === FIM DO BLOCO DE ÁUDIO ===
     // ==================================================================
 
-
     // --- 2. ESTADO DO JOGO ---
     let currentScore = 0;
     let unlockedLevel = 1;
@@ -42,22 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 3. FUNÇÕES PRINCIPAIS ---
 
-    /**
-     * Helper para tocar som (MODIFICADO)
-     */
     function playSound(audioElement) {
         if (isMuted) return;
-        
         const sound = audioElement.cloneNode();
         sound.volume = audioElement.volume;
         sound.play();
     }
     
-    /**
-     * Destrava a rolagem e esconde o vídeo quando ele termina.
-     */
     function startGame() {
-        videoOverlay.style.display = "none";
+        // Verifica se o overlay existe antes de tentar usá-lo
+        if (videoOverlay) {
+            videoOverlay.style.display = "none";
+        }
         body.classList.remove("noscroll");
         
         if (!isMuted) {
@@ -65,12 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /**
-     * NOVA FUNÇÃO: Liga ou desliga o som de todo o jogo.
-     */
     function toggleMute() {
+        // Se o botão não existir (por algum motivo), não faz nada
+        if (!muteToggleBtn) return; 
+
         isMuted = !isMuted;
-        
         const icon = muteToggleBtn.querySelector('i');
         
         if (isMuted) {
@@ -84,15 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    /**
-     * Abre ou fecha um card do acordeão.
-     */
     function toggleCard(card) {
         if (card.classList.contains("locked") || card.classList.contains("solved")) {
             return;
         }
-
         challengeCards.forEach(otherCard => {
             if (otherCard !== card && otherCard.classList.contains("active")) {
                 otherCard.classList.remove("active");
@@ -100,47 +89,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 otherCard.querySelector(".flag-form").style.display = "none";
             }
         });
-
         card.classList.toggle("active");
         const isActive = card.classList.contains("active");
-
         if (isActive) {
             playSound(audioClick);
         }
-
         card.querySelector(".card-toggle").textContent = isActive ? "-" : "+";
         card.querySelector(".flag-form").style.display = isActive ? "flex" : "none";
     }
-
-    // ==================================================================
-    // === ⚡️ FUNÇÃO CHECKFLAG SUBSTITUÍDA ⚡️ ===
-    // ==================================================================
     
-    /**
-     * Verifica se a flag inserida está correta (AGORA ASSÍNCRONO).
-     */
     async function checkFlag(form) {
         const card = form.closest(".challenge-card");
         const input = form.querySelector(".flag-input");
         const submitButton = form.querySelector(".flag-submit");
         const points = parseInt(card.dataset.points, 10);
         
-        // 1. Pega o número do desafio e cria a URL do endpoint
         const challengeNumber = card.dataset.challenge;
-        // Assume que o Flask está rodando localmente na porta 5000
         const endpoint = `http://127.0.0.1:5000/flag${challengeNumber}`;
 
-        // 2. Cria o corpo (payload) da requisição
         const payload = {
             flag: input.value
         };
 
-        // 3. Desabilita o botão para evitar cliques duplos
         submitButton.disabled = true;
         submitButton.textContent = "...";
 
         try {
-            // 4. Faz a requisição POST assíncrona
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -149,11 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(payload)
             });
 
-            // 5. Verifica a resposta do servidor
             if (response.status === 200) {
                 // --- ACERTOU! ---
                 playSound(audioCorrect);
-                
                 card.classList.add("solved");
                 card.classList.remove("active");
                 
@@ -194,49 +166,31 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => input.classList.remove("shake"), 500);
             alert("Erro de conexão: Não foi possível falar com o servidor do Miawlware!");
         } finally {
-            // 6. Reabilita o botão APENAS SE A FLAG ESTIVER ERRADA
             if (!card.classList.contains("solved")) {
                 submitButton.disabled = false;
                 submitButton.textContent = "OK";
             }
         }
     }
-    // ==================================================================
-    // === FIM DA SUBSTITUIÇÃO ===
-    // ==================================================================
 
-
-    /**
-     * Abre o modal de confirmação de dica.
-     */
     function openHintModal(card) {
         playSound(audioHint);
         cardRequestingHint = card;
         hintModal.style.display = "flex";
     }
 
-    /**
-     * Fecha o modal de dica.
-     */
     function closeHintModal() {
         hintModal.style.display = "none";
         cardRequestingHint = null;
     }
 
-    /**
-     * Oculta o modal de vitória.
-     */
     function closeWinModal() {
         winModal.style.display = "none";
     }
 
-    /**
-     * Desbloqueia a próxima dica trancada no card.
-     */
     function confirmHint() {
         if (cardRequestingHint) {
             playSound(audioClick);
-            
             const lockedHint = cardRequestingHint.querySelector(".hint-item.locked");
             if (lockedHint) {
                 lockedHint.classList.remove("locked");
@@ -254,22 +208,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- 4. INICIALIZAÇÃO E EVENTOS ---
-    introVideo.addEventListener('ended', startGame); 
-    videoOverlay.addEventListener('click', () => {
-        introVideo.pause();
-        startGame();
-    });
+    
+    // 1. Verifica se os elementos do vídeo existem
+    if (introVideo && videoOverlay) {
+        // Se existem, usa a lógica do vídeo
+        introVideo.addEventListener('ended', startGame); 
+        videoOverlay.addEventListener('click', () => {
+            introVideo.pause();
+            startGame();
+        });
+    } else {
+        // Se NÃO existem, inicia o jogo imediatamente
+        console.warn("Elementos do vídeo (intro-video, video-overlay) não encontrados. Iniciando o jogo diretamente.");
+        // Também remove a classe 'noscroll' do body, se o vídeo não existir
+        body.classList.remove("noscroll"); 
+        startGame(); // Chama o start para começar a música
+    }
+    
+    // 2. Verifica se o botão de mute existe
+    if (muteToggleBtn) {
+        muteToggleBtn.addEventListener('click', toggleMute);
+    } else {
+        console.warn("AVISO: O botão de mute (id='mute-toggle') não foi encontrado no HTML.");
+    }
 
-    // NOVO LISTENER PARA O BOTÃO DE MUTE
-    muteToggleBtn.addEventListener('click', toggleMute);
-
-    // Listeners dos Cards
+    // Listeners dos Cards (agora vão ser executados)
     challengeCards.forEach(card => {
         card.querySelector(".card-toggle").addEventListener("click", () => {
             toggleCard(card);
         });
 
-        // Modificado para chamar a função async
         card.querySelector(".flag-form").addEventListener("submit", (e) => {
             e.preventDefault();
             checkFlag(e.target); // e.target é o <form>
