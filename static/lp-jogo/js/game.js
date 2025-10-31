@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Pega o número do desafio e cria a URL do endpoint
         const challengeNumber = card.dataset.challenge;
         // Assume que o Flask está rodando localmente na porta 5000
-        const endpoint = `http://127.0.0.1:5000/flag${challengeNumber}`;
+        const endpoint = `http://caramelosec.duckdns.org:5000/flag${challengeNumber}`;
 
         // 2. Cria o corpo (payload) da requisição
         const payload = {
